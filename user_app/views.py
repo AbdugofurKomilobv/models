@@ -41,7 +41,12 @@ def admin_panel(request):
     return render(request=request,template_name='admin_panel.html',context=db)
 
 def teacher_panel(request):
-    return render(request, "teacher_panel.html")
+    users = User.objects.filter(is_student = True)
+
+    db = {
+        'users':users
+    }
+    return render(request, "teache_panel.html" ,context=db)
 
 def student_panel(request):
     return render(request, "student_panel.html")
@@ -56,7 +61,8 @@ def add_user(request):
         role = request.POST["role"]
         password = request.POST["password"]
 
-        user = CustomUserManager.objects.create_user(phone_number=phone_number, email=email, name=name, password=password)
+        user = User.objects.create_user(phone_number=phone_number, email=email, name=name, password=password)
+        
 
         if role == "teacher":
             user.is_teacher = True
@@ -69,29 +75,6 @@ def add_user(request):
 
     return render(request, "add_user.html")
 
-def add_student(request):
-    if request.method == "POST":
-        print(request.POST)  # Debug uchun
-        
-        phone_number = request.POST.get("phone")  # HTML dagi input name="phone"
-
-        if not phone_number:
-            return HttpResponse("Telefon raqam kiritilmadi!", status=400)
-
-        # Telefon raqami oldin bazada borligini tekshiramiz
-        if User.objects.filter(phone_number=phone_number).exists():
-            return HttpResponse("Bu telefon raqam allaqachon mavjud!", status=400)
-
-        # Yangi foydalanuvchini yaratamiz
-        user = User.objects.create_user(
-            phone_number=phone_number,
-            email=request.POST.get("email"),
-            name=request.POST.get("name"),
-            is_student=True,
-        )
-        return redirect("admin_panel")  # Qo‘shilgandan keyin admin panelga qaytarish
-
-    return render(request, "add_student.html")
 
 
 
