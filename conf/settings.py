@@ -117,7 +117,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-
+AUTH_USER_MODEL = 'user_app.User'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]  # assets emas!
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # static emas, staticfiles bo‘lsin
